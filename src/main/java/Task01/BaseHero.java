@@ -2,7 +2,7 @@ package Task01;
 
 import java.util.Arrays;
 
-public class BaseHero {
+public abstract class BaseHero  {
     String name;
     int attack, defence, health, speed;
     int[] damage;

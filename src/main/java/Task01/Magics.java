@@ -11,4 +11,6 @@ public class Magics extends BaseHero {
     public String toString() {
         return super.toString() + ", Mana: " + mana;
     }
+
+
 }
