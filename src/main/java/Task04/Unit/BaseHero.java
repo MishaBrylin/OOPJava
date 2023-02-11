@@ -33,7 +33,7 @@ public abstract class BaseHero implements BaseInterface {
     @Override
     public String getInfo() {
 
-            String outStr = String.format("Name: %-5s, class: %-5s-20, \t\t\t⚔%-3d\t\uD83D\uDEE1 %d,\t♥%d-3,\t⚡%d-%d-3, \t\uD83C\uDFC3 \t%d-10\t", name, clas, attack, defence,health, damage[0], damage[1], speed);
+            String outStr = String.format("Name: %-5s, class: %-5s, \t\t\t⚔%-3d\t\uD83D\uDEE1 %d,\t♥%d-3,\t⚡%d-%d-3, \t\uD83C\uDFC3 \t%d-10\t", name, clas, attack, defence,health, damage[0], damage[1], speed);
 
         return outStr;
     }
