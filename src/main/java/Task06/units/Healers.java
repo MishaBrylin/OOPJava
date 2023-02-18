@@ -1,75 +1,95 @@
-package Task06;
-import Task06.units.*;
+package Task06.units;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Random;
-import java.util.Scanner;
 
-public class Main {
-    public static final int GANG_SIZE = 10;
-    public static ArrayList<BaseHero> whiteSide;
-    public static ArrayList<BaseHero> darkSide;
+public class Healers extends BaseHero {
+    int mana;
 
-    public static void main(String[] args) {
-        init();
+    public Healers(ArrayList<BaseHero> teamList, String name, String role, String icon, int attack, int defence, int[] damage, int health, int speed, int mana, int x, int y, String team, boolean status) {
+        super(teamList, name, role, icon, attack, defence, damage, health, speed, x, y, team, status);
+        this.mana = mana;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", Mana: ";
+    }
 
 
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            ArrayList<BaseHero> units = new ArrayList<>();
-            units.addAll(whiteSide);
-            units.addAll(darkSide);
-            Comparator<BaseHero> comparator = Comparator.comparing(BaseHero::getSpeed);
-            units.sort(comparator);
-            ConsoleView.view();
-            System.out.println("Press ENTER");
-            scanner.nextLine();
+    @Override
+    public void step(ArrayList<BaseHero> heroList) {
+        if (health == 0) {
+            return;
+        }
+        if (status) {
+            status = false;
+            return;
+        }
 
-            units.forEach(n -> n.step(units));
-            scanner.nextLine();
+        int max = 100;
+        int maxi = 0;
+        for (int i = 0; i < teamList.size(); i++) {
+            if (teamList.get(i).health == 0) {
+                System.out.printf("\n%s оживил персонажа %s и дал имя ", name, teamList.get(i).name);
+                resurrect(i);
+                return;
+            }
+            int currentHealth = teamList.get(i).getHealth();
+            if (currentHealth < 100) {
+                if (currentHealth < max) {
+                    max = currentHealth;
+                    maxi = i;
+                }
+            }
+        }
+        if (max < 100) {
+            healing(teamList.get(maxi));
         }
     }
 
-    private static void init() {
+    private void healing(BaseHero weak) {
+        float healingPower = damage[0];
+        weak.getDamage(healingPower);
+        if (weak.health == weak.maxHealth) {
+//            System.out.printf("\n%s %s вылечил %s %s полностью. Текущее здоровье: %d/%d", name, role, weak.name, weak.role, (int) weak.health, weak.maxHealth);
+        } else {
+//            System.out.printf("\n%s %s вылечил %s %s на %d ед. здоровья. Текущее здоровье: %d/%d", name, role, weak.name, weak.role, (int) Math.abs(healingPower), (int) weak.health, weak.maxHealth);
+//
+        }
+    }
+
+    private void resurrect(int index) {
         String[] namesList = {" Альвир  " , " Аудбьёрн  " , " Атли  " , " Арнвид  " , " Асгаут  " , " Асбьёрн  " , " Аудун  " , " Ани  " , " Арн  " , " Ацур  " , " Аринбьёрн  " , " Аки  " , " Арнфид  " , " Альв  " , " Арнгейр  " , " Арнфинн  " , " Арнальд  " , " Армод  " , " Асгейр  " , " Альвальд  " , " Ари  " , " Ан  " , " Арнольв  " , " Асмунд  " , " Аудгисль  " , " Арнор  " , " Асвальд  " , " Арнлауг  " , " Аслак  " , " Асгрим  " , " Асбранд  " , " Али  " , " Арнгейр  " , " Аки  " , " Амунди  " , " Асольв  " , " Арнгуд  " , " Аскель  " , " Андотт  " , " Аудольв  " , " Асвард  " , " Аслак  " , " Ангрим  " , " Бьяльв  " , " Бьёргольв  " , " Брюньольв  " , " Бард  " , " Бауг  " , " Бьёрн  " , " Берг  " , " Берси  " , " Браги  " , " Бёдвар  " , " Барди  " , " Бёрк  " , " Бейнир  " , " Болли  " , " Бьярни  " , " Бергфинн  " , " Бьяртмар  " , " Бьяльви  " , " Бальдр  " , " Бальки  " , " Блэинг  " , " Бёдмод  " , " Бьолан  " , " Бродди  " , " Брёндольв  " , " Бьёрви  " , " Блотульв  " , " Вемунд  " , " Ветрлиди  " , " Вестар  " , " Вальгард  " , " Вали  " , " Вермунд  " , " Вивиль  " , " Велейн  " , " Вандрад  " , " Вальбранд  " , " Вальтьов  " , " Вегейр  " , " Вебьёрн  " , " Вестгейр  " , " Вигбьод  " , " Вестмар  " , " Вебранд  " , " Викар  " , " Ветерлиде  " , " Вандиль  " , " Грим  " , " Грьотгард  " , " Гардар  " , " Грани  " , " Гримольв  " , " Грис  " , " Гутторм  " , " Гейр  " , " Горм  " , " Гуннлауг  " , " Гуннар  " , " Гейрмунд  " , " Гудмунд  " , " Гуннвальд  " , " Гальти  " , " Гуннбьёрн  " , " Гилли  " , " Гильс  " , " Глум  " , " Гест  " , " -  " , " гость  " , " Греттир  " , " Гицур  " , " Гудлауг  " , " Гейтир  " , " Гнуп  " , " Гудрёд  " , " Гейрстейн  " , " Гамли  " , " Гьюки  " , " Гейртьов  " , " Гисли  " , " Гудбранд  " , " Гернир  " , " Герпир  " , " Гаут  " , " Глам  " , " Голльнир  " , " Гаук  " , " Гейрольв  " , " ГрьетгардДюр  " , " ДунгальЁрунд  " , " Ёкуль  " , " Ёрмунрекк  " , " Ингольв  " , " Ингвар  " , " Иллуги  " , " Ингьяльд  " , " Ислейв  " , " Иси  " , " Ивар  " , " Ингимунд  " , " Йон  " , " Йорунд  " , " Йонакр  " , " Кетиль  " , " Кари  " , " Квельдульв  " , " (-  " , " вечерний  " , " волк)  " , " Кьятви  " , " Квиг  " , " Кнут  " , " Кори  " , " (ирл.)  " , " Колль  " , " Кьяртан  " , " Кнётт  " , " Колльсвейн  " , " Клеппьярн  " , " Кормак  " , " Кьярваль  " , " Кьяллак  " , " Кугги  " , " Коткель  " , " Кари  " , " Кальв  " , " Кольбейн  " , " Кодран  " , " Кьярваль  " , " Кьётви  " , " Кональ  " , " Кар  " , " Кольскегг  " , " Кетильбьёрн  " , " Льот  " , " Ламби  " , " Лейв  " , " Лофт  " , " Лагман  " , " Лоддмунд  " , " Лодин  " , " Мюркьяртан  " , " (Muircertach)  " , " Мак  " , " Магнус  " , " Мельснати  " , " Мельдун  " , " Мёрд  " , " Мольда  " , " Мар  " , " Мелькольв  " , " Модольв  " , " Наддад  " , " Ньяль  " , " Нарви  " , " Орм  " , " Одд  " , " Олейв  " , " Оттар  " , " Освивр  " , " Олав  " , " Ослак  " , " Оддлейв  " , " Офеиг  " , " Осбранд  " , " Откель  " , " Р  " , " Рёгнвальд  " , " Рагнар  " , " Раги  " , " Рунольв  " , " Рейн  " , " Рэв  " , " Рауд  " , " Сальви  " , " Сигурд  " , " Сигтрюгг  " , " Скаллагрим  " , " Сигхват  " , " Сторольв  " , " Сумарлиди  " , " Сигмунд  " , " Серк  " , " Свейн  " , " Снорри  " , " Сварт  " , " Свертинг  " , " Скафти  " , " Стейндор  " , " Сёльмунд  " , " Сигвальди  " , " Скули  " , " Стейнар  " , " Свертлинг  " , " Сурт  " , " Стюр  " , " Скегги  " , " Соккольв  " , " Стейнгрим  " , " Стурла  " , " Стиганди  " , " Стув  " , " Скорри  " , " Стюрмир  " , " Сигват  " , " Скули  " , " Струтхаральд  " , " Свертинг  " , " Сёльви  " , " Стюркар  " , " Сака-Стейн  " , " Сиградд  " , " Сульки  " , " Стейнольв  " , " Стейнмод  " , " Сигфаст  " , " Снэбьёрн  " , " Сван  " , " Скув  " , " Сэмунд  " , " Снэколль  " , " Стурла  " , " Стейнвёр  " , " Сам  " , " Стурл  " , " Старр  " , " Скьёльдольв  " , " Соти  " , " Сигфус  " , " Сторольв  " , " Скарпхедин  " , " Снеульв  " , " Скьёльд  " , " Скарв  " , " Скамкель  " , " Старкад  " , " Снекольв  " , " Свасуд  " , " Торольв  " , " Торир  " , " Торбьёрн  " , " Торгильс  " , " Торд  " , " Торгейр  " , " Торкель  " , " Торстейн  " , " Тугни  " , " Торарин  " , " Тородд  " , " Тордом  " , " Торвальд  " , " Торфид  " , " Торфинн  " , " Трюггви  " , " Тормод  " , " Торберт  " , " Торхалль  " , " Торгрим  " , " Тодольв  " , " Тревиль  " , " Транд  " , " Торлейк  " , " Торрад  " , " Тангбранд  " , " Тидранди  " , " Торлак  " , " Торви  " , " Торгест  " , " Торвард  " , " Тюркир  " , " Торгаут  " , " Торбранд  " , " Торхадд  " , " Торлейв  " , " Торгейст  " , " Тьостар  " , " Тьостольв  " , " Тейт  " , " Трандиль  " , " Тови  " , " Траин  " , " Тюрвинг  " , " Ульв  " , " Угги  " , " Ульвар  " , " Уни  " , " Ульвхедин  " , " Флоки  " , " Фаравид  " , " Фроди  " , " Фридгейр  " , " Финн  " , " Финнбоги  " , " Флоси  " , " Фридрек  " , " Халльбьёрн  " , " Хроальд  " , " Халльстейн  " , " Хольмстейн  " , " Херстейн  " , " Харальд  " , " Хальвдан  " , " Херлауг  " , " Хроллауг  " , " Хунтьов  " , " Хакон  " , " Хельги  " , " Хёгни  " , " Харек  " , " Хрёрек  " , " Халльвард  " , " Хьёрлейв  " , " Храфн  " , " Херьольв  " , " Хильдир  " , " Хроальд  " , " Хёдд  " , " Хегг  " , " Хромунд  " , " Хауд  " , " Хёскульд  " , " Халльдор  " , " Халль  " , " Хлив  " , " Халли  " , " Хлёдвер  " , " Хермунд  " , " Хунди  " , " Херстейн  " , " Хрут  " , " Храпп  " , " Хрольв  " , " Халльфред  " , " Хьяльти  " , " Хардбейн  " , " Хунбоги  " , " Хросскель  " , " Хёрд  " , " Хлёвдир  " , " Халлькель  " , " Хавгрим  " , " Хаки  " , " (шотл.)  " , " Халльфрид  " , " Хавард  " , " Хергиль  " , " Хэинг  " , " Хлид  " , " Харек  " , " Хедин  " , " Хамунд  " , " Хавлиди  " , " Хьярранди  " , " Хавар  " , " Хрейдар  " , " Хавр  " , " Хэринг  " , " Халльвдан  " , " Халльфред  " , " Храфнкель  " , " Хёскульд  " , " Хьёрт  " , " Хроар  " , " Хамдир  " , " Хрёрек  " , " Хаук  " , " Хродгейр  " , " Эйвинд  " , " Эрн  " , " Энунд  " , " Эгиль  " , " Эйрик  " , " Эрнульв  " , " Эйнар  " , " Эгмунд  " , " Эрл  " , " Эйольв  " , " Эльдгрим  " , " Эрленд  " , " Эйстейн  " , " Эйд  " , " Эйндриди  " , " Эрлюг  " , " Эльвир  " , " Эйлив  " , " Эндотт  " , " Эцур  " , " Эвар  " , " Эрнольв  " , " Эргумлейди  " , " Эйульв  " , " Эрлинг  " , " Асни  " , " Аслауг  " , " Асгерд  " , " Алов  " , " Альвдис  " , " Астрид  " , " Ауд  " , " Альдис  " , " Арнора  " , " Аудбьёрг  " , " Аста  " , " Асню  " , " Асвёр  " , " Алёв  " , " Асдис  " , " Арнфрид  " , " Арнбьёрг  " , " Арнгуд  " , " Альвхейд  " , " Альвсуль  " , " Бера  " , " Бергтора  " , " Ботхильд  " , " Бергльот  " , " Бьяртей  " , " Брюнхильд  " , " Вигдис  " , " Вальгерд  " , " Гейрлауг  " , " Гуннхильд  " , " Гюда  " , " Гьявлауг  " , " Грейлад  " , " Гудрид  " , " Гроа  " , " Гудрун  " , " Гейрню  " , " Гримхильд  " , " Гро  " , " Грелёд  " , " Гудбьёрг  " , " Гёндуль  " , " Герд  " , " Гудню  " , " Гудфинна  " , " Дала  " , " Ингибьёрг  " , " Ингунн  " , " Ингирид  " , " Ири  " , " Ингвильд  " , " Исгерд  " , " Ингигерд  " , " Идун  " , " Йофрид  " , " Йорунн  " , " Кадли  " , " Кормлёд  " , " Кхадийя  " , " Лута  " , " Модэйд  " , " Мелькорка  " , " Нидбьёрг  " , " Нерейд  " , " Ньёрун  " , " Олов  " , " Оск  " , " Оса  " , " Оддбьёрг  " , " Ормхильд  " , " Рагнхильд  " , " Раннвейг  " , " Раварта  " , " Рагна  " , " Сальбьёрг  " , " Сольвейг  " , " Сигрид  " , " Сеунн  " , " Снотра  " , " Съёвн  " , " Скади  " , " Сигню  " , " Стейнвёр  " , " Стейнун  " , " Спес  " , " Миклагард  " , " Сванхильд  " , " Торлауг  " , " Торрунн  " , " Тордис  " , " Торунн  " , " Тора  " , " Торгерд  " , " Турид  " , " Торбьёрг  " , " Торхильд  " , " Торфинна  " , " Торхалла  " , " Торвар  " , " Тородда  " , " Тьодхильд  " , " Торгунна  " , " Торвёр  " , " Торве  " , " Торельв  " , " Торкатла  " , " Ульвейд  " , " Ульвейг  " , " Уна  " , " Ульвхейд  " , " Унн  " , " Фрейдис  " , " Фулла  " , " Фридгерд  " , " Халльбера  " , " Хельга  " , " Хильдирид  " , " Храфнхильд  " , " Хривла  " , " Халльдис  " , " Хродня  " , " Халльгерд  " , " Хильд  " , " Хрёвна  " , " Хревна  " , " Халла  " , " Хердис  " , " Хунгерд  " , " Хекья  " , " Хлёкк  " , " Хильд  " , " Хлин  " , " Халльдора  " , " Халльфрид  " , " Хродню  " , " Хильдигунн  " , " Эса  "};
         int namesSize = namesList.length;
-        whiteSide = new ArrayList<>();
-        darkSide = new ArrayList<>();
-        ArrayList<BaseHero> whiteFarmers = new ArrayList<>();
-        ArrayList<BaseHero> darkFarmers = new ArrayList<>();
-
+        int posX = (int) teamList.get(index).getPosition().x;
+        int posY = (int) teamList.get(index).getPosition().y;
+        status = true;
+        String heroTeam = teamList.get(index).getTeam();
         Random random = new Random();
-        int x = 1;
-        int y = 1;
-
-        for (int i = 0; i < GANG_SIZE; i++) {
+        if (heroTeam.equals("white")) {
             switch (random.nextInt(4)) {
                 case 0 ->
-                        whiteFarmers.add(new Farmer(whiteSide, namesList[random.nextInt(namesSize)], x, y++, "white", false));
+                        teamList.set(index, new Farmer(teamList, namesList[random.nextInt(namesSize)], posX, posY, "white", false));
                 case 1 ->
-                        whiteSide.add(new Rogue(whiteSide, namesList[random.nextInt(namesSize)], x, y++, "white", false));
+                        teamList.set(index, new Rogue(teamList, namesList[random.nextInt(namesSize)], posX, posY, "white", false));
                 case 2 ->
-                        whiteSide.add(new Sniper(whiteSide, namesList[random.nextInt(namesSize)], x, y++, "white", false));
+                        teamList.set(index, new Sniper(teamList, namesList[random.nextInt(namesSize)], posX, posY, "white", false));
                 case 3 ->
-                        whiteSide.add(new Mage(whiteSide, namesList[random.nextInt(namesSize)], x, y++, "white", false));
+                        teamList.set(index, new Mage(teamList, namesList[random.nextInt(namesSize)], posX, posY, "white", false));
             }
-        }
-        whiteSide.addAll(whiteFarmers);
-
-        x = GANG_SIZE;
-        y = 1;
-        for (int i = 0; i < GANG_SIZE; i++) {
+        } else {
             switch (random.nextInt(4)) {
                 case 0 ->
-                        darkSide.add(new Crossbowman(darkSide, namesList[random.nextInt(namesSize)], x, y++, "dark", false));
-                case 1 -> darkSide.add(new Monk(darkSide, namesList[random.nextInt(namesSize)], x, y++, "dark", false));
+                        teamList.set(index, new Crossbowman(teamList, namesList[random.nextInt(namesSize)], posX, posY, "dark", false));
+                case 1 ->
+                        teamList.set(index, new Monk(teamList, namesList[random.nextInt(namesSize)], posX, posY, "dark", false));
                 case 2 ->
-                        darkSide.add(new Spearman(darkSide, namesList[random.nextInt(namesSize)], x, y++, "dark", false));
+                        teamList.set(index, new Spearman(teamList, namesList[random.nextInt(namesSize)], posX, posY, "dark", false));
                 case 3 ->
-                        darkFarmers.add(new Farmer(darkSide, namesList[random.nextInt(namesSize)], x, y++, "dark", false));
+                        teamList.set(index, new Farmer(teamList, namesList[random.nextInt(namesSize)], posX, posY, "dark", false));
             }
         }
-        darkSide.addAll(darkFarmers);
+        System.out.printf("%s \n", teamList.get(index).name);
     }
 }
