@@ -19,14 +19,14 @@ class List {
         int value;
         private Node nextNode;
         private Node previous;
-        public void displayNodeData() {
+        public void print() {
             System.out.print( value +  " ");
         }
     }
     public void printLinkedList() {
         Node current = head;
         while (current != null) {
-            current.displayNodeData();
+            current.print();
             current = current.nextNode;
             System.out.print(" ");
 
