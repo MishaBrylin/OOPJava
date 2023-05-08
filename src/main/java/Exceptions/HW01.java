@@ -20,7 +20,7 @@ public class HW01 {
     }
 
 //    Посмотрите на код, и подумайте сколько разных типов исключений вы тут сможете получить?
-//    3 типа!
+//    2 типа!
     public static int[] subtractArrays(int[] arr1, int[] arr2) {
     if (arr1.length != arr2.length) {
         System.out.println("Длины массивов не равны!");
